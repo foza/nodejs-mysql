@@ -4,14 +4,17 @@ For installation
 ```sh
 $ cd project folder
 $ npm install -d
+$ npm install mysql 
+$ npm install express 
+$ npm install body-parser 
 $ node index
 ```
  Open index.js and edit the database.
 ```sh
 var mysqlConnection = mysql.createConnection({
-	host:'localhost',
-	user:'admin',
-	password: '230230',
+	host:'',
+	user:'',
+	password: '',
 	database: 'dev'
 });
 ```
