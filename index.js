@@ -31,7 +31,7 @@ mysqlConnection.connect((err)=>{
 app.listen(3001,()=>console.log('server start'));
 
 app.get('/list',(req,res)=>{
-	mysqlConnection.query('SELECT `id`, `name`, `phone` FROM `OrderCourier` ',(err, rows, fields)=>{
+	mysqlConnection.query('SELECT `id`, `name`, `phone` FROM `OrderCourier`',(err, rows, fields)=>{
 		if(!err)
 			res.send(rows);
 		else
@@ -39,8 +39,8 @@ app.get('/list',(req,res)=>{
 	})
 });
 
-app.get('/orders/:id',(req,res)=>{
-	mysqlConnection.query('SELECT `id`, `order_code`, `status_id`, `created` FROM `OrderOld` WHERE status_id = ?',[req.params.id],(err, rows, fields)=>{
+app.get('/detail/:id',(req,res)=>{
+	mysqlConnection.query('SELECT `id`, `order_code`, `status_id`, `balance`, `created` FROM `OrderOld` WHERE status_id = ?',[req.params.id],(err, rows, fields)=>{
 		if(!err)
 			res.send(rows);
 		else
@@ -48,7 +48,16 @@ app.get('/orders/:id',(req,res)=>{
 	})
 });
 
-app.get('/courier/:id',(req,res)=>{
+app.get('/sum/:id',(req,res)=>{
+	mysqlConnection.query('SELECT user_id, SUM(balance) AS user_sum  FROM `BillingHistory` WHERE user_id = ? GROUP BY user_id',[req.params.id],(err, rows, fields)=>{
+		if(!err)
+			res.send(rows);
+		else
+			console.log(err);
+	})
+});
+
+app.get('/courierDetail/:id',(req,res)=>{
 	mysqlConnection.query('SELECT * FROM `OrderCourier` INNER JOIN `BillingHistory` on `OrderCourier`.id = `BillingHistory`.user_id WHERE `OrderCourier`.id = ?',[req.params.id],(err, rows, fields)=>{
 		if(!err)
 			res.send(rows);
@@ -56,3 +65,4 @@ app.get('/courier/:id',(req,res)=>{
 			console.log(err);
 	})
 });
+
