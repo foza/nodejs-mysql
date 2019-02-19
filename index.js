@@ -10,8 +10,8 @@ app.use(bodyparser.urlencoded({
 }));
 var mysqlConnection = mysql.createConnection({
 	host:'localhost',
-	user:'admin',
-	password: '230230',
+	user:'root',
+	password: 'fozilsamsung197',
 	database: 'dev'
 });
 
@@ -68,11 +68,10 @@ app.get('/courierDetail/:id',(req,res)=>{
 	})
 });
 
-
-app.post('/add',(req,res)=>{
-
-	res.end(JSON.stringify(req.body));
-	console.log(req.body);
-
+app.post('/add', function (req, res) {
+   var postData  = req.body;
+   mysqlConnection.query('INSERT INTO `BillingHistory` SET ?', postData, function (error, results, fields) {
+	  if (error) throw error;
+	  res.end(JSON.stringify(results));
+	});
 });
-
