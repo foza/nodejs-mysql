@@ -2,10 +2,12 @@ const mysql = require('mysql');
 const express = require('express');
 const bodyparser = require('body-parser');
 var app = express();
+// app.use(bodyparser());
 
-app.use(bodyparser.json());
-
-
+app.use(bodyparser.json({ type: 'application/json' }));
+app.use(bodyparser.urlencoded({
+  extended: true
+}));
 var mysqlConnection = mysql.createConnection({
 	host:'localhost',
 	user:'admin',
@@ -16,7 +18,7 @@ var mysqlConnection = mysql.createConnection({
 var allowCrossDomain = function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', "*");
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-	res.header('Access-Control-Allow-Headers', 'Content-Type');
+	res.header('Access-Control-Allow-Headers', 'Content-Type', 'application/json');
 	next();
 };
 app.use(allowCrossDomain);
@@ -64,5 +66,13 @@ app.get('/courierDetail/:id',(req,res)=>{
 		else
 			console.log(err);
 	})
+});
+
+
+app.post('/add',(req,res)=>{
+
+	res.end(JSON.stringify(req.body));
+	console.log(req.body);
+
 });
 
